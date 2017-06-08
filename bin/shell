@@ -1,0 +1,69 @@
+
+
+
+#读取用户输入的输入路径（要转换的图片文件夹或图片文件）
+read -p "Please input include '.png' file or directory :" input
+
+#读取用户输入的输出路径（转换成功后的图片文件夹或图片文件）
+read -p "Please input include '.webp' file or directory :" output
+
+#mPath=$input  调试用
+
+#打印路径
+echo $input
+echo $output
+
+#test ! -f $mPath && echo "This is not file"	调试用
+
+function convertPic(){
+	name=${input##*/}
+	echo $name;
+	c=${name%.*}
+	echo $c
+	./cwebp -lossless $input -o $output/$c.webp 
+	exit 0;
+}
+
+function convertPicDirectory(){
+	for a in $input/*
+	do
+	echo "a="$a
+	b=${a##*/}
+	c=${b%.*}
+	echo "b="$b
+	echo "c="$c
+	echo "----------------"
+	if [[ $c == *\.9 ]];
+	then cp $a $output/$b
+	elif [[ $b == *\.jpg ]];
+	then cp $a $output/$b
+	elif [[ $b == *\.gif ]];
+	then cp $a $output/$b
+	else
+	./cwebp -lossless $a -o $output/$c.webp 
+	fi
+	done
+	exit 0;
+}
+#判断输入的路径是否存在
+if [ -e "$input" ];
+then echo "\n$input: is exist"
+else
+echo "\nNo such file or directory"
+fi
+
+#判断输入的路径是否存在且为文件夹
+if [ -d "$input" ];
+then 
+#如果是正确的文件夹，则开始遍历文件夹做转换操作
+echo "This is correct directory"
+#调用函数开始转换
+convertPicDirectory;
+
+#不是文件夹
+else
+#调用函数开始转换单个图片文件
+convertPic;
+echo "\nThis is not directory"
+fi
+
