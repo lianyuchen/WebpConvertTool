@@ -1,5 +1,5 @@
 # WebpConvertTool
-png图片格式无所压缩为webp格式的小脚本。
+png图片格式无损压缩为webp格式的小脚本。
 
 目前只是遍历单文件夹，并且只是实现webp的无损压缩。
 
